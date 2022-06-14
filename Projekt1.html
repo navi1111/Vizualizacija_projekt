@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <title>Učinak hrvatskih igrača u NBA Ligi</title>
+    <link rel="stylesheet"  href="style.css" />
+	<style>
+	  .axis {
+		font: 10px sans-serif;
+    color:white;
+	  }
+    
+    
+	  .axis path,
+	  .axis line {
+		fill: none;
+		stroke:white;
+		shape-rendering: crispEdges;
+	  }
+	  </style>
+</head>
+<body>
+    <script>
+        var data = [
+  {
+    "Name": "Bojan Bogdanovic",
+    "PTS": 15.3,
+    "REB": 4.1,
+    "AST": 2.2,
+    "STL": 0.9,
+    "BLK": 0.4,
+    "FG%": 44.1,
+    "3P%": 39.2,
+    "Games played":681
+  },
+  {
+    "Name": "Dario Saric",
+    "PTS": 11.7,
+    "REB": 5.9,
+    "AST": 2.0,
+    "STL": 0.6,
+    "BLK": 0.2,
+    "FG%": 44.1,
+    "3P%": 35.7,
+    "Games played": 356
+  },
+  {
+    "Name": "Ivica Zubac",
+    "PTS": 8.3,
+    "REB": 6.5,
+    "AST": 1.1,
+    "STL": 0.3,
+    "BLK": 0.8,
+    "FG%": 59.7,
+    "3P%": 10.0,
+    "Games played":360
+  },
+  {
+    "Name": "Mario Hezonja",
+    "PTS": 6.9,
+    "REB": 3.1,
+    "AST": 1.3,
+    "STL": 0.7,
+    "BLK": 0.2,
+    "FG%": 41.7,
+    "3P%": 31.9,
+    "Games played":330
+  },
+  {
+    "Name": "Toni Kukoc",
+    "PTS": 11.6,
+    "REB": 4.2,
+    "AST": 3.7,
+    "STL": 1.0,
+    "BLK": 0.3,
+    "FG%": 44.7,
+    "3P%": 33.5,
+    "Games played":846
+  },
+  {
+    "Name": "Drazen Petrovic",
+    "PTS": 15.4,
+    "REB": 2.3,
+    "AST": 2.4,
+    "STL": 0.9,
+    "BLK": 0.1,
+    "FG%": 50.6,
+    "3P%": 43.7,
+    "Games played":290
+  },
+  {
+    "Name": "Dino Rađa",
+    "PTS": 16.7,
+    "REB": 8.4,
+    "AST": 1.6,
+    "STL": 0.9,
+    "BLK": 1.3,
+    "FG%": 49.7,
+    "3P%": 0.00,
+    "Games played": 224
+  },
+  {
+    "Name": "Dragan Bender",
+    "PTS": 5.4,
+    "REB": 3.9,
+    "AST": 1.3,
+    "STL": 0.3,
+    "BLK": 0.6,
+    "FG%": 39.9,
+    "3P%": 32.3,
+    "Games played": 187
+  },
+  {
+    "Name": "Zan Tabak",
+    "PTS": 5.0,
+    "REB": 3.6,
+    "AST": 0.7,
+    "STL": 0.3,
+    "BLK": 0.5,
+    "FG%": 50.6,
+    "3P%": 0.00,
+    "Games played": 247
+  },
+  {
+    "Name": "Gordan Giricek",
+    "PTS": 9.6,
+    "REB": 2.5,
+    "AST": 1.5,
+    "STL": 0.6,
+    "BLK": 0.1,
+    "FG%": 44.2,
+    "3P%": 36.8,
+    "Games played": 384
+  },
+  
+]
+        var margin = {top: 50, bottom: 70, left: 300, right: 10};
+        var width = 1200 - margin.left - margin.right;
+        var height = 700 - margin.top - margin.bottom;
+        var barPadding = 15;
+        var barWidth = width / data.length - barPadding;
+        
+        var x = d3.scale.ordinal()
+            .domain(d3.range(data.length))
+            .rangeRoundBands([0, width]);
+
+        var y = d3.scale.linear()
+            .domain([0, d3.max(data, function(d) { return d.PTS; })])
+            .range([height, 0]);
+            
+            
+
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.bottom + margin.top)
+            .style("background-color", "none")
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top +")");
+
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .tickFormat(function(d, i) { return data[i].Name; });
+
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(10);
+
+        svg.append("text")
+            .attr("x", (width / 2))
+            .attr("y", -(margin.top / 2))
+            .attr("font-weight", "bold")
+            .style("font-size", "20px")
+            .style("text-anchor", "middle")
+            .style('fill', 'white')
+            .text("Učinak hrvatskih igrača u NBA ligi kroz povijest");
+
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
+            .selectAll("text")
+            .style("text-anchor", "middle")
+            .style("font-size","12px")
+            .style("fill", "white");
+
+
+
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -(height / 2))
+            .attr("y", -((margin.left / 2) )+90)
+            .style("text-anchor", "middle")
+            .text("Prosjek poena hrvatskih igrača u NBA ligi")
+			      .style("font-size", "15px")
+            .style("fill","#FFFF");
+
+
+        var barchart = svg.selectAll("rect")
+            .data(data)
+            .enter()
+            .append("rect")
+            .attr("x", function(d, i) { return x(i); })
+            .attr("y", function(d, i) { return y(d.PTS); })
+            .attr("height", function(d) { return height - y(d.PTS); })
+            .attr("width", barWidth)
+            .attr("fill", "#FFFF")
+            .on("click", function(d, i) { d3.select("#name").text( "Player name:" + d.Name +  "\n" + "  Career stats: "+"\n" +
+            "  Points: " + d.PTS + "\n" + "  Rebounds: " + d.REB + "\n" + "  Assists: " + d.AST+"\n"+"  Steals: " + d.STL+ "\n"+ "  Blocks: "+ d.BLK )});
+            
+          barchart.attr("height",0)
+          .transition()
+          .duration(1000)
+          .attr("height",function(d){return height - y(d.PTS)});
+            
+          d3.select("body")
+            .append("div")
+            .attr("id", "name").style("fill", "white");
+    
+            
+            
+            
+
+
+    </script>
+    <p style="position: fixed; bottom: 0; width:100%; text-align: end; font-size: 15px; color: aliceblue;">
+      You can <a href="./Projekt3.html">click </a> on next page to see another chart.
+    </p>
+</body>
+</html>
